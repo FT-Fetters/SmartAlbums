@@ -1,8 +1,12 @@
 package com.lyun.smartalbums.utils;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
 
 public class CookieUtils {
     public static String getCookie(HttpServletRequest request, String cookieName) {
@@ -19,9 +23,12 @@ public class CookieUtils {
     }
 
     public static void writeCookie(HttpServletResponse response, String cookieName, String value) {
-        Cookie cookie = new Cookie(cookieName, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(60 * 60);
-        response.addCookie(cookie);
+        ResponseCookie cookie = ResponseCookie.from(cookieName,value)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(Duration.ofHours(1))
+                .build();
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 }

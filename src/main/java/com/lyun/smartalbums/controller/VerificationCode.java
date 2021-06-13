@@ -25,10 +25,11 @@ public class VerificationCode {
         ValidationQueue.validationMap.put(verificationId,code+"&120");
         CookieUtils.writeCookie(response,"verificationId",verificationId);
         File verificationFile = new File(filePath);
+        byte[] bytes =null;
         if (verificationFile.exists()){//判断该验证码文件是否存在
             try {
                 FileInputStream inputStream = new FileInputStream(verificationFile);
-                byte[] bytes = new byte[inputStream.available()];
+                bytes = new byte[inputStream.available()];
                 inputStream.read(bytes,0,inputStream.available());
                 inputStream.close();
                 return bytes;
@@ -36,7 +37,7 @@ public class VerificationCode {
                 e.printStackTrace();
             }
         }
-        return null;
+        return bytes;
 
     }
 

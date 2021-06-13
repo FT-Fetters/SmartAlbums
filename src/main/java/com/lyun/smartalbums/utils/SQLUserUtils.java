@@ -1,11 +1,14 @@
 package com.lyun.smartalbums.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -70,6 +73,22 @@ public class SQLUserUtils {
         String sql = "SELECT PASSWORD FROM smartalbums_user WHERE username='admin'";
         String adminPwd = sqlUserUtils.jdbcTemplate.queryForObject(sql,String.class);
         System.out.println("数据库测试>管理员密码为:"+adminPwd);
+    }
+
+    public static HashMap<String,String> getUserInf(String username){
+        String nickname_sql = "SELECT nickname FROM smartalbums_user WHERE username='"+username+"'";
+        String email_sql = "SELECT email FROM smartalbums_user WHERE username='"+username+"'";
+        String synopsis_sql = "SELECT synopsis FROM smartalbums_user WHERE username='"+username+"'";
+        String nickname = sqlUserUtils.jdbcTemplate.queryForObject(nickname_sql,String.class);
+        String email = sqlUserUtils.jdbcTemplate.queryForObject(email_sql,String.class);
+        String synopsis = sqlUserUtils.jdbcTemplate.queryForObject(synopsis_sql,String.class);
+        HashMap<String,String> res = new HashMap<>();
+        res.put("nickname",nickname);
+        res.put("email",email);
+        res.put("synopsis", synopsis);
+        return res;
+
+
     }
 
 
