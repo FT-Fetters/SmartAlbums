@@ -87,8 +87,14 @@ public class SQLUserUtils {
         res.put("email",email);
         res.put("synopsis", synopsis);
         return res;
+    }
 
-
+    public static void changeUserInf(HashMap<String,String> inf,String username){
+        String nickname = inf.get("nickname");
+        String email = inf.get("email");
+        String synopsis = inf.get("synopsis");
+        String sql = "UPDATE smartalbums_user SET nickname='"+nickname+"',synopsis='"+synopsis+"',email='"+email+"' WHERE username='"+username+"'";
+        sqlUserUtils.jdbcTemplate.queryForObject(sql,String.class);
     }
 
 

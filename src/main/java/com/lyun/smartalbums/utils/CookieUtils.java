@@ -23,12 +23,9 @@ public class CookieUtils {
     }
 
     public static void writeCookie(HttpServletResponse response, String cookieName, String value) {
-        ResponseCookie cookie = ResponseCookie.from(cookieName,value)
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(Duration.ofHours(1))
-                .build();
-        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        Cookie cookie = new Cookie(cookieName, value);
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60);
+        response.addCookie(cookie);
     }
 }

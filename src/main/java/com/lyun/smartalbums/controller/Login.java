@@ -4,6 +4,7 @@ package com.lyun.smartalbums.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.lyun.smartalbums.bean.LoginUser;
 import com.lyun.smartalbums.utils.CookieUtils;
+import com.lyun.smartalbums.utils.SQLUserUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +23,10 @@ public class Login {
         String username = data.getString("username");
         String pwd = data.getString("pwd");
         JSONObject resJson = new JSONObject();
-        if (username.equals("test1") && pwd.equals("testpwd")){
+        if (SQLUserUtils.matchPassword(username,pwd)){
             String loginId = DigestUtils.md5DigestAsHex((System.currentTimeMillis() + pwd).getBytes(StandardCharsets.UTF_8));
             LoginUser lg = new LoginUser(loginId);
-            CookieUtils.writeCookie(response,"username","test1");
+            CookieUtils.writeCookie(response,"username",username);
             CookieUtils.writeCookie(response,"loginId",loginId);
             LoginUser.addLoginUser(username,lg);
             resJson.put("MSG","SUCCESS");
