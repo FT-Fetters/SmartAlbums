@@ -18,7 +18,7 @@ import java.io.IOException;
 @RestController
 public class GetImage {
     @GetMapping("/getImage")
-    public byte[] getImage(@RequestParam String imageName, HttpServletResponse response, HttpServletRequest request){
+    public byte[] getImage(@RequestParam String classification,@RequestParam String imageName, HttpServletResponse response, HttpServletRequest request){
         String username = CookieUtils.getCookie(request,"username");
         String loginId = CookieUtils.getCookie(request,"loginId");
         if (username == null || loginId == null || !LoginUser.getLoginUsers().get(username).getLoginId().equals(loginId)){
@@ -27,7 +27,7 @@ public class GetImage {
         String baseUrl = HomePathUtils.getPath() + "/userImage/" + username;
         File userFolder = new File(baseUrl);
         if (userFolder.exists()){
-            String imagePath = baseUrl + "/" + imageName;
+            String imagePath = baseUrl + "/" +classification+"/"+ imageName;
             File imageFile = new File(imagePath);
             if (imageFile.exists()){
                 try {

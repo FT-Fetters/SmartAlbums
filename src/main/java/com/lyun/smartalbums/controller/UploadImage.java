@@ -4,8 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lyun.smartalbums.bean.LoginUser;
 import com.lyun.smartalbums.utils.CookieUtils;
 import com.lyun.smartalbums.utils.HomePathUtils;
-import org.python.util.PythonInterpreter;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +18,7 @@ import java.util.Objects;
 @RestController
 public class UploadImage {
 
+    @PostMapping("/uploadImage")
     public static JSONObject uploadImage(@RequestParam MultipartFile file,
                                          HttpServletResponse response,
                                          HttpServletRequest request){
@@ -43,6 +43,12 @@ public class UploadImage {
                 file.transferTo(userImage);
                 JSONObject uploadSuccess = new JSONObject();
                 uploadSuccess.put("msg","Upload success");
+                try {
+                    //本地开发环境的时候使用python,上传到服务器的时候要改成python3
+                    Runtime.getRuntime().exec("python " + HomePathUtils.getPath() + "/SmartalbumsClassification/classification.py");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return uploadSuccess;
             } catch (IOException e) {
                 e.printStackTrace();

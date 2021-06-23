@@ -3,12 +3,12 @@ package com.lyun.smartalbums;
 import com.lyun.smartalbums.thread.ValidationQueue;
 import com.lyun.smartalbums.utils.HomePathUtils;
 import com.lyun.smartalbums.utils.SQLUserUtils;
-import org.python.util.PythonInterpreter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
+import java.io.IOException;
 
 @SpringBootApplication
 public class SmartAlbumsApplication {
@@ -28,8 +28,7 @@ public class SmartAlbumsApplication {
         userImageFile.setWritable(true, false);
         if (!userImageFile.exists())userImageFile.mkdirs();
         System.out.println(dir.getPath());
-        PythonInterpreter interpreter = new PythonInterpreter();
-        interpreter.execfile(HomePathUtils.getPath() + "/SmartalbumsClassification/classification.py");
+
     }
 
     private static void loadThread(){
