@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.Objects;
 
 @RestController
 public class GetImageList {
@@ -25,7 +26,10 @@ public class GetImageList {
     public JSONObject getImageList(HttpServletResponse response, HttpServletRequest request){
         String username = CookieUtils.getCookie(request,"username");
         String loginId = CookieUtils.getCookie(request,"loginId");
-        if (username == null || loginId == null || !LoginUser.getLoginUsers().get(username).getLoginId().equals(loginId)){
+        System.out.println(username+","+loginId);
+        System.out.println(LoginUser.getLoginUsers().size());
+        if (!(LoginUser.getLoginUsers().containsKey(username) &&
+                loginId.equals(LoginUser.getLoginUsers().get(username).getLoginId()))){
             JSONObject notLogin = new JSONObject();
             notLogin.put("msg","Not login");
             return notLogin;
@@ -44,14 +48,17 @@ public class GetImageList {
         JSONObject returnImage = new JSONObject();
         File[] userFiles = userFile.listFiles();
         JSONObject imageFile = new JSONObject();
+        JSONArray list = new JSONArray();
         for (File file : userFiles) {
             JSONArray jsonImages = new JSONArray();
+            list.add(file.getName());
             File[] images = file.listFiles();
             for (File image : images) {
                 jsonImages.add(image.getName());
             }
             imageFile.put(file.getName(),jsonImages);
         }
+        returnImage.put("list",list);
         returnImage.put("data",imageFile);
         returnImage.put("msg","Success");
 

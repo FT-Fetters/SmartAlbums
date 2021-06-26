@@ -26,6 +26,7 @@ public class CookieUtils {
         Cookie cookie = new Cookie(cookieName, value);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60);
+        cookie.setHttpOnly(false);
         response.addCookie(cookie);
     }
 }

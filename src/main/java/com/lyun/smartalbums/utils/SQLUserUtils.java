@@ -36,9 +36,14 @@ public class SQLUserUtils {
      * @return 如果用户名和密码相对应则返回true
      */
     public static boolean  matchPassword(String username,String password){
-        String sql = "SELECT PASSWORD FROM smartalbums_user WHERE username='"+username+"'";
-        String sqlPwd = sqlUserUtils.jdbcTemplate.queryForObject(sql,String.class);
-        return password.equals(sqlPwd);
+        try {
+            String sql = "SELECT PASSWORD FROM smartalbums_user WHERE username='"+username+"'";
+            String sqlPwd = sqlUserUtils.jdbcTemplate.queryForObject(sql,String.class);
+            if (sqlPwd == null) return false;
+            return password.equals(sqlPwd);
+        }catch (Exception e){
+            return false;
+        }
     }
 
 

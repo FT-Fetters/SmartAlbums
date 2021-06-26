@@ -19,7 +19,7 @@ import java.util.Objects;
 public class UploadImage {
 
     @PostMapping("/uploadImage")
-    public static JSONObject uploadImage(@RequestParam MultipartFile file,
+    public static JSONObject uploadImage(@RequestParam("file") MultipartFile file,
                                          HttpServletResponse response,
                                          HttpServletRequest request){
         String username = CookieUtils.getCookie(request,"username");
@@ -39,13 +39,13 @@ public class UploadImage {
             userImageTempDir.setWritable(true,false);
             if (userImageTempDir.exists())userImageTempDir.mkdir();
             try {
-                File userImage = new File(HomePathUtils.getPath() + "/userImage" + "/" + username+"/temp" + "/" + file.getOriginalFilename());
+                File userImage = new File(userImageTempDir.getAbsolutePath() + "/" + file.getOriginalFilename());
                 file.transferTo(userImage);
                 JSONObject uploadSuccess = new JSONObject();
                 uploadSuccess.put("msg","Upload success");
                 try {
                     //本地开发环境的时候使用python,上传到服务器的时候要改成python3
-                    Runtime.getRuntime().exec("python " + HomePathUtils.getPath() + "/SmartalbumsClassification/classification.py");
+                    Runtime.getRuntime().exec("python3 " + HomePathUtils.getPath() + "/SmartalbumsClassification/classification.py");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
